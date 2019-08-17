@@ -64,7 +64,12 @@ spiec.easi.otu_table <- function(data, ...) {
 # internal function to normalize a data matrix
   if (inherits(data, 'matrix')) {
     ## standard data pipeline
-    return(t(clr(data+1, 1)))
+    if (dim(data)[2] == 1) {
+      ## need two t() calls to properly transpose data with single column
+      return(t(t(clr(data+1, 1))))
+    } else {
+      return(t(clr(data+1, 1)))
+    }
   } else if (inherits(data, 'list')) {
     ## multi domain spiec.easi, data must be list of numeric matrices
     return(do.call('cbind', lapply(data, .spiec.easi.norm)))
